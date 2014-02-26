@@ -9,12 +9,11 @@ function is_udc_agent() {
 	$agent = $_SERVER ['HTTP_USER_AGENT'];
 	return ereg ( 'Eclipse UDC/.*', $agent );
 }
-
 // If the UDC is not providing the data, then redirect to the UDC landing page.
-// if (!is_udc_agent()) {
-// header("Location: http://www.eclipse.org/org/usagedata");
-// return;
-// }
+if (! is_udc_agent ()) {
+	header ( "Location: http://www.dawnsci.org/documentation/usagecollector" );
+	return;
+}
 
 /*
  * Uncomment this section to effectively shutdown the gathering of usage data. A 500 error is returned to the requestor who should retain their data for a subsequent upload.
