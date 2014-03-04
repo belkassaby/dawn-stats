@@ -7,12 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import uk.ac.diamond.modulestats.updater.logger.MyLogger;
 
 public class ModulesDBUpdater {
-
-	private static Logger logger = LoggerFactory.getLogger(ModulesDBUpdater.class);
 
 	/**
 	 * args[0]: module load log file path, 
@@ -24,6 +21,9 @@ public class ModulesDBUpdater {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+
+		new MyLogger();
+
 		if (args.length != 2) {
 			System.out.println("Please enter two arguments where argument1 is the file path" +
 					" of the moduleload_log.txt file and the argument2 is the filepath of" +
@@ -32,7 +32,7 @@ public class ModulesDBUpdater {
 		}
 		int currentModulesNumber = 0;
 		List<String[]> list = null;
-		String lastDateEntry = "";
+//		String lastDateEntry = "";
 		// SQL connection to read the current data in the module table and
 		// prepare accordingly the data to insert
 		System.out.println("Opening connection for reading and preparing data");
@@ -44,14 +44,14 @@ public class ModulesDBUpdater {
 			while (result.next()) {
 				String str = result.getString(1);
 				currentModulesNumber = Integer.valueOf(str);
-				System.out.println(currentModulesNumber);
+				System.out.println("Last module in DB: " + currentModulesNumber);
 			}
 			// read last row of table
-			result = statement.executeQuery("SELECT * FROM dawnstats.moduleload_record WHERE id="+currentModulesNumber+";");
-			while (result.next()) {
-				lastDateEntry = result.getString(2);
-				System.out.println(lastDateEntry);
-			}
+//			result = statement.executeQuery("SELECT * FROM dawnstats.moduleload_record WHERE id="+currentModulesNumber+";");
+//			while (result.next()) {
+//				lastDateEntry = result.getString(2);
+//				//System.out.println(lastDateEntry);
+//			}
 			//read module log file
 			LogReader log = new LogReader(args[0]);
 			list = log.read(currentModulesNumber);
@@ -59,14 +59,12 @@ public class ModulesDBUpdater {
 			conn.close();
 			System.out.println("Connection closed");
 		} catch (SQLException e) {
-			logger.error("Error during query:" +e.getMessage());
 			System.out.println("Error during query:" +e.getMessage());
 			e.printStackTrace();
 			return;
 		}
 
 		if (list == null) {
-			logger.error("No data to insert in the database");
 			System.out.println("No data to insert in the database");
 			return;
 		}
@@ -101,15 +99,14 @@ public class ModulesDBUpdater {
 				preparedStatement .executeUpdate();
 				i++;
 			}
-			logger.debug(i + " rows have been inserted");
 			System.out.println(i + " rows have been inserted");
 			//close connection
 			updateconn.close();
 			System.out.println("Connection closed");
 		} catch (SQLException e) {
-			logger.error("Error during insertion:" +e.getMessage());
 			System.out.println("Error during insertion:" +e.getMessage());
 			e.printStackTrace();
 		}
 	}
+
 }

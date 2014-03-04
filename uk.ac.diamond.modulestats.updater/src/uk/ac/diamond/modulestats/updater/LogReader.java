@@ -8,12 +8,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class LogReader {
-
-	private Logger logger = LoggerFactory.getLogger(LogReader.class);
 
 	private String filepath;
 
@@ -27,6 +22,7 @@ public class LogReader {
 	 * @return List<String[]>
 	 */
 	public List<String[]> read(int linestart) {
+
 		List<String[]> newModules = new ArrayList<String[]>();
 		File file = new File(filepath);
 		Charset charset = Charset.forName("UTF-8");
@@ -45,7 +41,6 @@ public class LogReader {
 			reader.close();
 			return newModules;
 		} catch (IOException x) {
-			logger.error("IOException: %s%n", x);
 			System.err.format("IOException: %s%n", x);
 			return null;
 		}
