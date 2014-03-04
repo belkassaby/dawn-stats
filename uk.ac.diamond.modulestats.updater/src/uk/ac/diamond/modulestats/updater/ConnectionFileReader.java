@@ -6,8 +6,12 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ConnectionFileReader {
 
+	private Logger logger = LoggerFactory.getLogger(ConnectionFileReader.class);
 	private String username;
 	private String password;
 	private String host;
@@ -43,6 +47,7 @@ public class ConnectionFileReader {
 			// close buffered reader
 			reader.close();
 		} catch (IOException x) {
+			logger.error("IOException: %s%n", x);
 			System.err.format("IOException: %s%n", x);
 		}
 	}

@@ -7,7 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ModulesDBUpdater {
+
+	private static Logger logger = LoggerFactory.getLogger(ModulesDBUpdater.class);
 
 	/**
 	 * args[0]: module load log file path, 
@@ -54,12 +59,14 @@ public class ModulesDBUpdater {
 			conn.close();
 			System.out.println("Connection closed");
 		} catch (SQLException e) {
+			logger.error("Error during query:" +e.getMessage());
 			System.out.println("Error during query:" +e.getMessage());
 			e.printStackTrace();
 			return;
 		}
 
 		if (list == null) {
+			logger.error("No data to insert in the database");
 			System.out.println("No data to insert in the database");
 			return;
 		}
@@ -94,11 +101,13 @@ public class ModulesDBUpdater {
 				preparedStatement .executeUpdate();
 				i++;
 			}
+			logger.debug(i + " rows have been inserted");
 			System.out.println(i + " rows have been inserted");
 			//close connection
 			updateconn.close();
 			System.out.println("Connection closed");
 		} catch (SQLException e) {
+			logger.error("Error during insertion:" +e.getMessage());
 			System.out.println("Error during insertion:" +e.getMessage());
 			e.printStackTrace();
 		}
