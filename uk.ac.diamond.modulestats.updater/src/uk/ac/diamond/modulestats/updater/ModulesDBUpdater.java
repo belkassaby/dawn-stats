@@ -1,3 +1,18 @@
+/*-
+ * Copyright 2014 Diamond Light Source Ltd.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package uk.ac.diamond.modulestats.updater;
 
 import java.sql.Connection;
@@ -31,11 +46,11 @@ public class ModulesDBUpdater {
 			return;
 		}
 		int currentModulesNumber = 0;
-		List<String[]> list = null;
+		List<List<String>> list = null;
 //		String lastDateEntry = "";
 		// SQL connection to read the current data in the module table and
 		// prepare accordingly the data to insert
-		System.out.println("Opening connection for reading and preparing data");
+//		System.out.println("Opening connection for reading and preparing data");
 		SQLDriverLoader loader = new SQLDriverLoader(args[1]);
 		Connection conn = loader.getConnection();
 		try {
@@ -57,7 +72,7 @@ public class ModulesDBUpdater {
 			list = log.read(currentModulesNumber);
 			//close connection
 			conn.close();
-			System.out.println("Connection closed");
+//			System.out.println("Connection closed");
 		} catch (SQLException e) {
 			System.out.println("Error during query:" +e.getMessage());
 			e.printStackTrace();
@@ -71,7 +86,7 @@ public class ModulesDBUpdater {
 		//list: string[0]: date, string[1]:fedid, string[2]:workstation , string[3]:module load , string[4]:release
 		// create a new connection for the insertion
 		SQLDriverLoader updateloader = new SQLDriverLoader(args[1]);
-		System.out.println("Opening connection for insertion of data");
+//		System.out.println("Opening connection for insertion of data");
 		Connection updateconn = updateloader.getConnection();
 		try {
 			String insertTableSQL = "INSERT INTO dawnstats.moduleload_record"
@@ -79,21 +94,21 @@ public class ModulesDBUpdater {
 					+ "(?,?,?,?,?,?)";
 			PreparedStatement preparedStatement = updateconn.prepareStatement(insertTableSQL);
 			int i = 0;
-			for (String[] line : list) {
+			for (List<String> line : list) {
 				//increment the id
 				currentModulesNumber++;
 				//id
 				preparedStatement.setInt(1, currentModulesNumber);
 				//date
-				preparedStatement.setString(2, line[0]);
+				preparedStatement.setString(2, line.get(0));
 				//userid
-				preparedStatement.setString(3, line[1]);
+				preparedStatement.setString(3, line.get(1));
 				//workstation
-				preparedStatement.setString(4, line[2]);
+				preparedStatement.setString(4, line.get(2));
 				//module load
-				preparedStatement.setString(5, line[3]);
+				preparedStatement.setString(5, line.get(3));
 				//release
-				preparedStatement.setString(6, line[4]);
+				preparedStatement.setString(6, line.get(4));
 
 				// execute insert SQL stetement
 				preparedStatement .executeUpdate();
@@ -102,7 +117,7 @@ public class ModulesDBUpdater {
 			System.out.println(i + " rows have been inserted");
 			//close connection
 			updateconn.close();
-			System.out.println("Connection closed");
+//			System.out.println("Connection closed");
 		} catch (SQLException e) {
 			System.out.println("Error during insertion:" +e.getMessage());
 			e.printStackTrace();
