@@ -29,7 +29,7 @@ public class SQLDriverLoader {
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("Driver loaded");
+			//System.out.println("Driver loaded");
 		} catch (ClassNotFoundException e) {
 			System.out.println("Could not load driver:"+e.getMessage());
 		}
