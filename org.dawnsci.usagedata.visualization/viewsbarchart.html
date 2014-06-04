@@ -28,14 +28,14 @@ body {
 
 </style>
 <body>
-<label><input type="checkbox"> Sort values</label>
+<label><input type="checkbox"> Sort by most used</label>
 <script src="js/d3/d3.v3.min.js"></script>
 <script src="js/d3/d3.tip.v0.6.3.js"></script>
 <script>
 
-var margin = {top: 40, right: 20, bottom: 200, left: 40},
+var margin = {top: 40, right: 20, bottom: 10, left: 60},
     width = 960 - margin.left - margin.right,
-    height = 700 - margin.top - margin.bottom;
+    height = 600 - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1);
@@ -55,7 +55,7 @@ var tip = d3.tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
   .html(function(d) {
-    return  "<span style='color:yellow'>" + d.description.split(".")[d.description.split(".").length -1] + "</span> : " + " <strong>" + d.number + "</strong>";
+    return  "<span style='color:yellow'>" + d.description + "</span> : " + " <strong>" + d.number + "</strong>";
   })
 
 var svg = d3.select("body").append("svg")
@@ -72,9 +72,10 @@ d3.json("http://diamweb01.diamond.ac.uk/dawnstats/download.php?type=views", func
     d.number = +d.number;
   });
 
-  x.domain(data.map(function(d) { return d.description.split(".")[d.description.split(".").length -1]; }));
+  x.domain(data.map(function(d) { return d.description; }));
   y.domain([0, d3.max(data, function(d) { return d.number; })]);
 
+/*  
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
@@ -86,7 +87,7 @@ d3.json("http://diamweb01.diamond.ac.uk/dawnstats/download.php?type=views", func
             .attr("transform", function(d) {
                 return "rotate(-65)" 
                 });
-
+*/
   svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
@@ -101,7 +102,7 @@ d3.json("http://diamweb01.diamond.ac.uk/dawnstats/download.php?type=views", func
       .data(data)
     .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return x( d.description.split(".")[d.description.split(".").length -1]); })
+      .attr("x", function(d) { return x( d.description); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.number); })
       .attr("height", function(d) { return height - y(d.number); })
@@ -120,8 +121,8 @@ function change() {
     // Copy-on-write since tweens are evaluated after a delay.
     var x0 = x.domain(data.sort(this.checked
         ? function(a, b) { return b.number - a.number; }
-        : function(a, b) { return d3.ascending(a.description.split(".")[a.description.split(".").length -1], b.description.split(".")[b.description.split(".").length -1]); })
-        .map(function(d) { return d.description.split(".")[d.description.split(".").length -1]; }))
+        : function(a, b) { return d3.ascending(a.description, b.description); })
+        .map(function(d) { return d.description; }))
         .copy();
 
     var transition = svg.transition().duration(750),
@@ -129,7 +130,7 @@ function change() {
 
     transition.selectAll(".bar")
         .delay(delay)
-        .attr("x", function(d) { return x0(d.description.split(".")[d.description.split(".").length -1]); });
+        .attr("x", function(d) { return x0(d.description); });
 
     transition.select(".x.axis")
         .call(xAxis)
