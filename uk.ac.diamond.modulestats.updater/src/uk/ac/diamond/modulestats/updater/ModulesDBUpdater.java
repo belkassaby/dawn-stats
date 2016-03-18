@@ -55,7 +55,7 @@ public class ModulesDBUpdater {
 		Connection conn = loader.getConnection();
 		try {
 			Statement statement = conn.createStatement();
-			ResultSet result = statement.executeQuery("SELECT count(*) FROM dawnstats.moduleload_record;");
+			ResultSet result = statement.executeQuery("SELECT count(*) FROM " + loader.getDatabaseName() +".moduleload_record;");
 			while (result.next()) {
 				String str = result.getString(1);
 				currentModulesNumber = Integer.valueOf(str);
@@ -89,7 +89,7 @@ public class ModulesDBUpdater {
 //		System.out.println("Opening connection for insertion of data");
 		Connection updateconn = updateloader.getConnection();
 		try {
-			String insertTableSQL = "INSERT INTO dawnstats.moduleload_record"
+			String insertTableSQL = "INSERT INTO " + updateloader.getDatabaseName() + ".moduleload_record"
 					+ "(id, time, user_id, workstation, module_load, release_version) VALUES"
 					+ "(?,?,?,?,?,?)";
 			PreparedStatement preparedStatement = updateconn.prepareStatement(insertTableSQL);

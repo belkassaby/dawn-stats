@@ -22,11 +22,12 @@ import java.sql.SQLException;
 public class SQLDriverLoader {
 
 	private Connection conn = null;
+	private String databaseName;
 
 	public SQLDriverLoader(String connectionfilepath) {
 		//Retrieve the connection info
 		ConnectionFileReader myConnect = new ConnectionFileReader(connectionfilepath);
-		
+		setDatabaseName(myConnect.getDatabase());
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			//System.out.println("Driver loaded");
@@ -35,7 +36,7 @@ public class SQLDriverLoader {
 		}
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://"+myConnect.getHost()+"/"
-					+myConnect.getDatabase()+"?" + "user="+myConnect.getUsername()
+					+databaseName+"?" + "user="+myConnect.getUsername()
 					+"&password="+myConnect.getPassword());
 
 			// Do something with the Connection
@@ -50,5 +51,13 @@ public class SQLDriverLoader {
 
 	public Connection getConnection() {
 		return conn;
+	}
+
+	public String getDatabaseName() {
+		return databaseName;
+	}
+
+	public void setDatabaseName(String databaseName) {
+		this.databaseName = databaseName;
 	}
 }
