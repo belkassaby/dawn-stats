@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>DAWN logins</title>
+
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<style type="text/css">
+${demo.css}
+		</style>
+		<script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'area'
+        },
+        title: {
+            text: 'DAWN startups - Area stacked chart'
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            tickmarkPlacement: 'on',
+            title: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Number of logins'
+            },
+            labels: {
+                formatter: function () {
+                    return this.value;
+                }
+            }
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: ''
+        },
+        plotOptions: {
+            area: {
+                stacking: 'normal',
+                lineColor: '#666666',
+                lineWidth: 1,
+                marker: {
+                    lineWidth: 1,
+                    lineColor: '#666666'
+                }
+            }
+        },
+        series: [{
+            name: 'Startups 2013',
+            data: [0,0,663,568,626,378,482,414,474,611,427,352]
+        }, {
+            name: 'Unique Users 2013',
+            data: [0,0,64,68,82,66,94,74,87,121,85,78]
+        },{
+            name: 'Startups 2014',
+            data: [504,651,522,440,688,603,804,472,402,654,487,562]
+        }, {
+            name: 'Unique Users 2014',
+            data: [99,123,106,82,136,87,144,85,79,110,85,105]
+        },{
+            name: 'Startups 2015',
+            data: [590, 860, 528, 580, 784, 634, 763, 473, 423, 693,492, 482]
+        }, {
+            name: 'Unique Users 2015',
+            data: [83, 127, 86, 103, 124, 97, 132, 81, 106, 124, 91, 92]
+        }, {
+			name: 'DAWN startups 2016',
+			data: [423,741,584,747,645,801,895,612,656,603,420,480]
+		}, {
+			name: 'Unique Users 2016',
+			data: [108,127,95,110,98,125,128,90,108,90,65,97]
+		}]
+    });
+});
+		</script>
+	</head>
+	<body>
+<script src="js/highcharts.js"></script>
+<script src="js/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>
