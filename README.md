@@ -4,7 +4,7 @@ dawn-stats
 DAWN statistics usage tools
 
 *org.dawnsci.usagedata.server
-PHP web application used to upload dawn statistic data to a MySQL database and download it from the same database and return it as JSON data given a specific HTTP request.
+PHP web application used to download statistic data from a MySQL database and return it as JSON data given a specific HTTP request.
 
 *org.dawnsci.usagedata.visualization
 Webpages with javascript visualization libraries that use the json retrieved from the PHP server
