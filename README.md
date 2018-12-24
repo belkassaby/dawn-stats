@@ -1,4 +1,4 @@
-dawn-stats
+Dawn-stats
 ==========
 
 DAWN statistics usage tools
